@@ -16,6 +16,6 @@ public class CommonResponseHandler extends SignalingHandler{
 
     @Override
     protected void messageHandle(ChannelHandlerContext ctx, JTMessage msg) {
-        Log.i(TAG, "messageHandle: 平台通用应答");
+//        Log.i(TAG, "messageHandle: 平台通用应答");
     }
 }

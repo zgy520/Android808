@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import dalvik.system.BaseDexClassLoader;
+import dalvik.system.DexClassLoader;
 import dalvik.system.DexFile;
+import dalvik.system.PathClassLoader;
 
 /**
  * @author yezhihao

@@ -1,6 +1,7 @@
 package com.tonfun.codecsnetty.bll.protocol.codec;
 
 
+import android.util.Log;
 
 import com.tonfun.codecsnetty.bll.protocol.basics.Header;
 import com.tonfun.codecsnetty.bll.protocol.basics.JTMessage;
@@ -11,21 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
 import io.github.yezhihao.protostar.ProtostarUtil;
 import io.github.yezhihao.protostar.Schema;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.CompositeByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.buffer.UnpooledByteBufAllocator;
 
 /**
  * JT协议解码器
+ *
  * @author yezhihao
  * @home https://gitee.com/yezhihao/jt808-server
  */
 public class JTMessageDecoder {
 
+
+    private static final String TAG = "JTMessageDecoder";
 
     private Map<Integer, Schema<Header>> headerSchemaMap;
 
@@ -38,8 +42,8 @@ public class JTMessageDecoder {
         buf = unescape(buf);
 
         boolean verified = verify(buf);
-        /*if (!verified)
-            log.error("校验码错误{},{}", ByteBufUtil.hexDump(buf));*/
+        if (!verified)
+            Log.e(TAG, "校验码错误:" + ByteBufUtil.hexDump(buf));
 
         int properties = buf.getUnsignedShort(2);
 
@@ -81,7 +85,7 @@ public class JTMessageDecoder {
             }
         } else {
             message = new JTMessage();
-//            log.debug("未找到对应的Schema[{}]", header);
+            Log.d(TAG, "未找到对应的Schema:" + header);
         }
 
         message.setHeader(header);
@@ -92,7 +96,9 @@ public class JTMessageDecoder {
         return null;
     }
 
-    /** 校验 */
+    /**
+     * 校验
+     */
     public static boolean verify(ByteBuf buf) {
         byte checkCode = buf.getByte(buf.readableBytes() - 1);
         buf = buf.slice(0, buf.readableBytes() - 1);
@@ -101,7 +107,9 @@ public class JTMessageDecoder {
         return checkCode == calculatedCheckCode;
     }
 
-    /** 反转义 */
+    /**
+     * 反转义
+     */
     public static ByteBuf unescape(ByteBuf source) {
         int low = source.readerIndex();
         int high = source.writerIndex();
@@ -137,7 +145,9 @@ public class JTMessageDecoder {
         return new CompositeByteBuf(UnpooledByteBufAllocator.DEFAULT, false, bufList.size(), bufList);
     }
 
-    /** 截取转义前报文，并还原转义位 */
+    /**
+     * 截取转义前报文，并还原转义位
+     */
     protected static ByteBuf slice(ByteBuf byteBuf, int index, int length) {
         byte second = byteBuf.getByte(index + length - 1);
         if (second == 0x02) {

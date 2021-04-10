@@ -6,7 +6,7 @@ import com.tonfun.codecsnetty.client.JT808Beans;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 
-public class HeartBetaHandler extends SignalingHandler{
+public class HeartBetaHandler extends SignalingHandler {
     private static final String TAG = "HeartBetaHandler";
 
     public HeartBetaHandler() {
@@ -15,16 +15,16 @@ public class HeartBetaHandler extends SignalingHandler{
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof IdleStateEvent){
-            IdleStateEvent event =(IdleStateEvent)evt;
-            switch (event.state()){
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent event = (IdleStateEvent) evt;
+            switch (event.state()) {
                 case ALL_IDLE:
-                    ctx.channel().writeAndFlush(JT808Beans.H2019(JT808Beans.T0002()));
+                    MessageSendUtils.sendMessage(ctx.channel(), JT808Beans.H2019(JT808Beans.T0002()));
                     break;
                 default:
                     break;
             }
-        }else {
+        } else {
             super.userEventTriggered(ctx, evt);
         }
 

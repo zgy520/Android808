@@ -14,8 +14,6 @@ public abstract class MessageHandler extends SimpleChannelInboundHandler<JTMessa
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, JTMessage msg) throws Exception {
-        Log.i(TAG, "channelRead0: 执行了");
-
         if (!handle(ctx, msg)) {
             // 如果当前通道不处理该消息，则转到下一个通道处理
             ctx.fireChannelRead(msg);

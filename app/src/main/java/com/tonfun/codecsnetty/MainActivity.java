@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.tonfun.codecsnetty.bll.handler.MessageSendUtils;
 import com.tonfun.codecsnetty.bll.protocol.basics.Header;
 import com.tonfun.codecsnetty.bll.protocol.codec.JTMessageDecoder;
 import com.tonfun.codecsnetty.bll.protocol.codec.JTMessageEncoder;
@@ -66,6 +67,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public void openVideoSetting(View view) {
         Log.i(TAG, "openVideoSetting: 发送消息2");
-        NettyApplication.channel.writeAndFlush(JT808Beans.H2013(JT808Beans.T0102_2013()));
+        MessageSendUtils.sendMessage(NettyApplication.channel,JT808Beans.H2013(JT808Beans.T0102_2013()));
     }
 }
